@@ -118,6 +118,7 @@ computer.
 | Cursor      | Install [Cursor CLI](https://cursor.com/cli), then run `agent login`.                        |
 | Grok Build  | Install [Grok Build CLI](https://x.ai/cli), then run `grok login`.                           |
 | OpenCode    | Install [OpenCode](https://opencode.ai), then run `opencode auth login`.                     |
+| Pi          | Install [Pi](https://pi.dev), then authenticate upstream providers with `pi auth`.           |
 | Antigravity | Install and sign in with Google from T3 Code's provider settings.                            |
 
 Provider CLIs must be on the server's `PATH`. If T3 Code cannot find one, set its
@@ -144,8 +145,8 @@ base URL. Mark secret values as sensitive; after saving, T3 Code does not displa
 their original values.
 
 For provider-specific setup and accounts, see [Codex](./providers-codex.md),
-[Claude](./providers-claude.md), [OpenCode](./providers-opencode.md), and
-[Antigravity](./providers-antigravity.md).
+[Claude](./providers-claude.md), [OpenCode](./providers-opencode.md),
+[Pi](./providers-pi.md), and [Antigravity](./providers-antigravity.md).
 
 ## Next steps
 

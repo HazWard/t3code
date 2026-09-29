@@ -99,6 +99,17 @@ const buildCmd = Command.make(
       } else {
         yield* Effect.logWarning("[cli] Web dist not found — skipping client bundle.");
       }
+
+      // The Pi provider loads its T3 bridge extension by file path at
+      // runtime (Pi has no module channel), so the source ships beside the
+      // bundle like the web client does. Both `dist/bin.mjs` (npx, desktop)
+      // and the single-executable archive resolve `pi/t3code.ts` relative
+      // to the entry.
+      const piExtensionSource = path.join(serverDir, "src/provider/pi/t3code.ts");
+      const piExtensionTargetDir = path.join(serverDir, "dist/pi");
+      yield* fs.makeDirectory(piExtensionTargetDir, { recursive: true });
+      yield* fs.copyFile(piExtensionSource, path.join(piExtensionTargetDir, "t3code.ts"));
+      yield* Effect.log("[cli] Staged Pi bridge extension into dist/pi");
     }),
 ).pipe(Command.withDescription("Build the server package (tsdown + bundle web client)."));
 

@@ -75,7 +75,7 @@ export function isModelSelectionUnavailable(
   const driver =
     provider?.driver ?? config.settings?.providerInstances[selection.instanceId]?.driver;
   return (
-    driver === "antigravity" &&
+    (driver === "antigravity" || driver === "pi") &&
     (!provider ||
       !provider.enabled ||
       !provider.installed ||
@@ -102,7 +102,7 @@ export function resolveSelectableModelSelection(
   );
   const driver =
     provider?.driver ?? config.settings?.providerInstances[selection.instanceId]?.driver;
-  if (driver === "antigravity") {
+  if (driver === "antigravity" || driver === "pi") {
     return selection;
   }
   return provider &&
@@ -128,7 +128,9 @@ export function resolveDefaultableModelSelection(
   }
   const provider = config.providers.find((candidate) => candidate.instanceId === usable.instanceId);
   const model = provider?.models.find((candidate) => candidate.slug === usable.model);
-  return provider?.driver !== "antigravity" && model?.isLegacy === true ? null : usable;
+  return provider?.driver !== "antigravity" && provider?.driver !== "pi" && model?.isLegacy === true
+    ? null
+    : usable;
 }
 
 export function resolveNewTaskModelSelection(input: {
@@ -194,7 +196,7 @@ export function buildModelOptions(
       options.set(key, {
         ...existing,
         selection:
-          existing.providerDriver === "antigravity"
+          existing.providerDriver === "antigravity" || existing.providerDriver === "pi"
             ? fallbackModelSelection
             : normalizeSelectionOptions(fallbackModelSelection, existing.capabilities),
       });

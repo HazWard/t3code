@@ -164,6 +164,11 @@ export const PREFERRED_DEFAULT_CODEX_MODELS: ReadonlyArray<string> = [
 export const DEFAULT_TEXT_GENERATION_MODEL = "gpt-6-luna";
 /** Keep the official Antigravity session's current model. Never send this ID to ACP. */
 export const ANTIGRAVITY_DEFAULT_MODEL = "antigravity-default";
+/**
+ * Product slug meaning "the Pi session's current model". Never sent to Pi:
+ * the adapter skips `set_model` for it and Pi keeps its own default.
+ */
+export const PI_DEFAULT_MODEL = "pi-default";
 export const DEFAULT_TEXT_GENERATION_REASONING_EFFORT = "low";
 
 export const DEFAULT_MODEL_BY_PROVIDER: Partial<Record<ProviderDriverKind, string>> = {
@@ -174,6 +179,8 @@ export const DEFAULT_MODEL_BY_PROVIDER: Partial<Record<ProviderDriverKind, strin
   [GROK_DRIVER_KIND]: "grok-build",
   [OPENCODE_DRIVER_KIND]: "openai/gpt-5",
   [ProviderDriverKind.make("antigravity")]: ANTIGRAVITY_DEFAULT_MODEL,
+  // Product slug, not a Pi model id. The Pi adapter treats it as "the session's current model".
+  [ProviderDriverKind.make("pi")]: PI_DEFAULT_MODEL,
 };
 
 /** Per-provider text generation model defaults. */
@@ -185,6 +192,7 @@ export const DEFAULT_TEXT_GENERATION_MODEL_BY_PROVIDER: Partial<
   [CLAUDE_DRIVER_KIND]: "claude-haiku-4-5",
   [CURSOR_DRIVER_KIND]: "composer-2",
   [OPENCODE_DRIVER_KIND]: "openai/gpt-5",
+  [ProviderDriverKind.make("pi")]: PI_DEFAULT_MODEL,
 };
 
 export const MODEL_SLUG_ALIASES_BY_PROVIDER: Partial<

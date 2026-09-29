@@ -273,6 +273,19 @@ export const GrokIcon: Icon = ({ className, ...props }) => (
   </svg>
 );
 
+export const PiIcon: Icon = ({ className, ...props }) => (
+  <svg
+    {...props}
+    viewBox="0 0 560 560"
+    fill="none"
+    className={cn("fill-[#0F0F0F] dark:fill-[#F5F5F5]", className)}
+  >
+    <path d="M420 280H280V140H0V0H420V280Z" />
+    <path d="M560 560H420V280H560V560Z" />
+    <path d="M140 560H0V140H140V280H280V420H140V560Z" />
+  </svg>
+);
+
 export const TraeIcon: Icon = (props) => (
   <svg {...props} viewBox="0 0 24 24" fill="currentColor">
     {/* Back rectangle: left strip + bottom strip drawn separately — empty bottom-left corner is the gap between them */}

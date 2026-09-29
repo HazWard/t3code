@@ -12,6 +12,7 @@
  *   t3 | t3.exe          the single-executable
  *   client/              web app served by the server
  *   resource-monitor/    per-platform Rust helper, same paths as the npm package
+ *   pi/                  Pi provider bridge extension, loaded by path at runtime
  *   node_modules/        runtime externals (node-pty, msgpackr-extract, fff)
  */
 import * as NodeRuntime from "@effect/platform-node/NodeRuntime";
@@ -489,6 +490,7 @@ const buildCliArchive = Effect.fn("buildCliArchive")(function* (input: {
   const resourceMonitorDir = Option.getOrElse(input.resourceMonitorDir, () =>
     path.join(serverDir, "dist/resource-monitor"),
   );
+  const piBridgeDir = path.join(serverDir, "dist/pi");
 
   yield* requireInput(
     builtExecutable,
@@ -499,6 +501,7 @@ const buildCliArchive = Effect.fn("buildCliArchive")(function* (input: {
     resourceMonitorDir,
     "Build the resource monitor or pass --resource-monitor-dir.",
   );
+  yield* requireInput(path.join(piBridgeDir, "t3code.ts"), "Run `vp run --filter t3 build` first.");
 
   const stem = cliArchiveStem(input.version, input.platform, input.arch);
   const stageRoot = yield* fs.makeTempDirectoryScoped({ prefix: "t3-cli-archive-" });
@@ -509,6 +512,7 @@ const buildCliArchive = Effect.fn("buildCliArchive")(function* (input: {
   yield* fs.copyFile(builtExecutable, path.join(contentDir, executableName));
   yield* stageWebClient(webClient, path.join(contentDir, "client"));
   yield* fs.copy(resourceMonitorDir, path.join(contentDir, "resource-monitor"));
+  yield* fs.copy(piBridgeDir, path.join(contentDir, "pi"));
   yield* stageRuntimeExternals({
     repoRoot,
     stageDir: contentDir,

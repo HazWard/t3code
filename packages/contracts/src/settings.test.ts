@@ -770,6 +770,28 @@ describe("provider enabled defaults", () => {
     expect(decoded.providers.cursor.enabled).toBe(false);
     expect(decoded.providers.grok.enabled).toBe(false);
     expect(decoded.providers.opencode.enabled).toBe(false);
+    expect(decoded.providers.pi.enabled).toBe(false);
+  });
+
+  it("decodes Pi provider settings with binary and upstream defaults", () => {
+    const decoded = decodeServerSettings({
+      providers: {
+        pi: { enabled: true, defaultProvider: "opencode-go", defaultModel: "opencode-go/x" },
+      },
+    });
+    expect(decoded.providers.pi.enabled).toBe(true);
+    expect(decoded.providers.pi.binaryPath).toBe("pi");
+    expect(decoded.providers.pi.defaultProvider).toBe("opencode-go");
+    expect(decoded.providers.pi.defaultModel).toBe("opencode-go/x");
+    expect(decoded.providers.pi.usePiSessionDirectory).toBe(false);
+    expect(
+      decodeServerSettingsPatch({ providers: { pi: { launchArgs: "--thinking high" } } }).providers
+        ?.pi?.launchArgs,
+    ).toBe("--thinking high");
+    expect(
+      decodeServerSettingsPatch({ providers: { pi: { usePiSessionDirectory: true } } }).providers
+        ?.pi?.usePiSessionDirectory,
+    ).toBe(true);
   });
 
   it("keeps Cursor enabled when an existing user explicitly opted in", () => {
@@ -789,9 +811,12 @@ describe("provider enabled defaults", () => {
   it("resolves instance enabled state with explicit false winning", () => {
     const grok = ProviderDriverKind.make("grok");
     const codex = ProviderDriverKind.make("codex");
+    const pi = ProviderDriverKind.make("pi");
     // No flags anywhere: driver default applies.
     expect(resolveProviderInstanceEnabled({ driver: grok, config: {} })).toBe(false);
     expect(resolveProviderInstanceEnabled({ driver: codex, config: {} })).toBe(true);
+    // Pi ships opt-in like the other young bindings.
+    expect(resolveProviderInstanceEnabled({ driver: pi, config: {} })).toBe(false);
     // Unknown fork drivers stay enabled.
     expect(
       resolveProviderInstanceEnabled({ driver: ProviderDriverKind.make("ollama"), config: {} }),

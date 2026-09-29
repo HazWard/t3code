@@ -53,6 +53,17 @@ export function ProviderIcon(props: ProviderIconProps) {
     );
   }
 
+  if (props.provider === "pi") {
+    const fill = isDarkMode ? "#F5F5F5" : "#0F0F0F";
+    return (
+      <Svg width={size} height={size} viewBox="0 0 560 560" fill="none">
+        <Path fill={fill} d="M420 280H280V140H0V0H420V280Z" />
+        <Path fill={fill} d="M560 560H420V280H560V560Z" />
+        <Path fill={fill} d="M140 560H0V140H140V280H280V420H140V560Z" />
+      </Svg>
+    );
+  }
+
   if (props.provider === "cursor") {
     return (
       <Svg width={size} height={size} viewBox="0 0 466.73 532.09" fill="none">
